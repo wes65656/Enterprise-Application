@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using NSE.Identidade.API.Configuration;
-using NSE.Identidade.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +10,7 @@ builder.Services.AddSwaggerGen();
 var configuration = builder.Configuration;
 
 builder.Services.AddApiConfiguration(configuration);
-
+builder.Services.AddSwaggerConfiguration();
 
 var app = builder.Build();
 
@@ -23,6 +21,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseApiConfiguration();
 
