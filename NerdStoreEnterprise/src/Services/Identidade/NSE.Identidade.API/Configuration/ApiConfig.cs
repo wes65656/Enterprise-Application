@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NSE.Identidade.API.Data;
+using NSE.Identidade.API.Extensions;
 
 namespace NSE.Identidade.API.Configuration;
 
@@ -17,7 +18,7 @@ public static class ApiConfig
        
         services.AddDefaultIdentity<IdentityUser>()
             .AddRoles<IdentityRole>()
-            //AddErrorDesciber PT-BR in Extension later.
+            .AddErrorDescriber<IdentityMensagensPortugues>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         
