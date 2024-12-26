@@ -11,14 +11,24 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace NSE.Identidade.API.Controllers;
 
+/// <summary>
+/// Controlador responsável pela autenticação de usuários.
+/// </summary>
 [ApiController]
 [Route("api/identidade")]
+
 public class AuthController : Controller  // Later we can fix this providing a base class with common behavior
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly AppSettings _appSettings;
     
+    /// <summary>
+    /// Inicializa uma nova instância do controlador AuthController.
+    /// </summary>
+    /// <param name="userManager">Gerenciador de usuários.</param>
+    /// <param name="signInManager">Gerenciador de login.</param>
+    /// <param name="appSettings">Configurações da aplicação.</param>
     public AuthController(UserManager<IdentityUser> userManager, 
                         SignInManager<IdentityUser> signInManager, 
                         IOptions<AppSettings> appSettings)
@@ -29,7 +39,13 @@ public class AuthController : Controller  // Later we can fix this providing a b
     }
     
     
+    /// <summary>
+    /// Cria uma nova conta de usuário.
+    /// </summary>
+    /// <param name="userRegister">Informações de registro do usuário.</param>
+    /// <returns>Resultado do processo de criação de conta.</returns>
     [HttpPost("Criar-conta")]
+    
     public async Task<IActionResult> Register(UserRegister userRegister)
     {
         System.Diagnostics.Debugger.Break();
@@ -54,6 +70,11 @@ public class AuthController : Controller  // Later we can fix this providing a b
         return BadRequest();
     }
     
+    /// <summary>
+    /// Autentica um usuário.
+    /// </summary>
+    /// <param name="userLogin">Informações de login do usuário.</param>
+    /// <returns>Resultado do processo de autenticação.</returns>
     [HttpPost("Autenticar")]
     public async Task<IActionResult> Login(UserLogin userLogin)
     {
@@ -69,6 +90,11 @@ public class AuthController : Controller  // Later we can fix this providing a b
         return BadRequest();
     }
     
+    /// <summary>
+    /// Gera um token de autenticação JWT.
+    /// </summary>
+    /// <param name="email">E-mail do usuário.</param>
+    /// <returns>Token de autenticação JWT.</returns>
     private async Task<UserAnswerLogin> GenerateJwt(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
