@@ -10,17 +10,16 @@ using NSE.Identidade.API.Models;
 
 namespace NSE.Identidade.API.Controllers;
 
-[ApiController]
 [Route("api/identidade")]
-public class AuthController : Controller
+public class AuthController : MainController
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly AppSettings _appSettings;
 
     public AuthController(UserManager<IdentityUser> userManager,
-        SignInManager<IdentityUser> signInManager,
-        IOptions<AppSettings> appSettings)
+                          SignInManager<IdentityUser> signInManager,
+                          IOptions<AppSettings> appSettings)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -30,7 +29,7 @@ public class AuthController : Controller
     [HttpPost("Criar-conta")]
     public async Task<IActionResult> Register(UserRegister userRegister)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState); // Return detailed errors
+        if (!ModelState.IsValid) return CustomResponse(ModelState); // Return detailed errors
 
         var user = new IdentityUser
         {
@@ -44,16 +43,21 @@ public class AuthController : Controller
         if (result.Succeeded)
         {
             await _signInManager.SignInAsync(user, false);
-            return Ok(await GenerateJwt(user)); // Pass the user object for efficiency
+            return CustomResponse(await GenerateJwt(user)); // Pass the user object for efficiency
         }
 
-        return BadRequest(result.Errors); // Return detailed errors
+        foreach (var error in result.Errors)
+        {
+            AddError(error.Description);
+        }
+
+        return CustomResponse(result.Errors); // Return detailed errors
     }
 
     [HttpPost("Autenticar")]
     public async Task<IActionResult> Login(UserLogin userLogin)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState); // Return detailed errors
+        if (!ModelState.IsValid) return CustomResponse(ModelState); // Return detailed errors
 
         var result =
             await _signInManager.PasswordSignInAsync(userLogin.Email, userLogin.Password, false,
@@ -62,13 +66,19 @@ public class AuthController : Controller
         if (result.Succeeded)
         {
             var user = await _userManager.FindByEmailAsync(userLogin.Email);
-            return Ok(await GenerateJwt(user));
+            return CustomResponse(await GenerateJwt(user));
         }
 
-        return BadRequest("Login inválido"); // More descriptive feedback
+        if (result.IsNotAllowed)
+        {
+            AddError("User is temporarily blocked for security reasons.");
+            return CustomResponse();
+        }
+        
+        AddError("User or password is invalid.");
+        return CustomResponse(); // More descriptive feedback
     }
-
-
+    
     private async Task<UserAnswerLogin> GenerateJwt(IdentityUser user)
     {
         var claims = await _userManager.GetClaimsAsync(user);
