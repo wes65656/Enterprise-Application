@@ -9,14 +9,16 @@ builder.Services.AddSwaggerGen();
 
 var configuration = builder.Configuration;
 
-builder.Services.AddApiConfiguration(configuration);
+builder.Services.AddApiConfiguration(configuration);//, builder.Environment
 builder.Services.AddSwaggerConfiguration();
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    builder.Configuration.AddUserSecrets<Program>();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
