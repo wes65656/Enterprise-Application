@@ -46,7 +46,7 @@ public static class ApiConfig
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(bearerOptions =>
+        }).AddJwtBearer(bearerOptions => 
         {
            bearerOptions.RequireHttpsMetadata = true;
            bearerOptions.SaveToken = true;
