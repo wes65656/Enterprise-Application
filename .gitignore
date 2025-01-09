@@ -362,3 +362,20 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# ASP.NET Core MVC specific files
+
+# Dependency Injection and configuration files
+appsettings*.json
+appsettings*.Development.json
+
+# Static files output (optional, uncomment if needed)
+# wwwroot/
+
+# BundlerMinifier
+bundleconfig.json
+*.min.js
+*.min.css
+*.map
+
+# IIS Express settings
+*.vs\config\applicationhost.config
