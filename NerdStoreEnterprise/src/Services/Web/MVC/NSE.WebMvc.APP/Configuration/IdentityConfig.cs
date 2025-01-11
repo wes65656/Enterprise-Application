@@ -12,7 +12,8 @@ public static class IdentityConfig
                 options.LoginPath = "/login";
                 options.AccessDeniedPath = "/denied-access";
             });
-        services.AddAuthorization();
+        
+         services.AddHttpContextAccessor();
     }
 
     public static void UseIdentityConfiguration(this IApplicationBuilder app)
