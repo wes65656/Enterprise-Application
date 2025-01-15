@@ -29,9 +29,9 @@ public static class WebAppConfig
         
         app.UseIdentityConfiguration();
         
-        app.UseEndpoints(Endpoints =>
+        app.UseEndpoints(endpoints =>
         {
-            Endpoints.MapControllerRoute(
+            endpoints.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}()");
         });
