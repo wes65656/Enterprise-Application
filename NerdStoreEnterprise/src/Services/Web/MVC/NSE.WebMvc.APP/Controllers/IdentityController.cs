@@ -31,6 +31,7 @@ public class IdentityController : Controller
     [Route("login")]
     public async Task<IActionResult> Login()
     {
+        
         return View();
     }
     
@@ -38,13 +39,19 @@ public class IdentityController : Controller
     [Route("login")]
     public async Task<IActionResult> Login(UserLogin userLogin)
     {
-        return View();
+        if (!ModelState.IsValid) return View(userLogin);
+        // registro
+        
+        if (false) return View(userLogin);
+        // realizar login na aplicação
+        
+        return RedirectToAction("Index", "Home");
     }
     
     [HttpGet]
     [Route("logout")]
     public async Task<IActionResult> Logout()
     {
-        return View();
+        return RedirectToAction("Index", "Home");
     }
 }
