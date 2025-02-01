@@ -1,13 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using NSE.WebMvc.APP.Models;
+using NSE.WebMvc.APP.Service;
 
 namespace NSE.WebMvc.APP.Controllers;
 
 [ApiController]
 public class IdentityController : Controller
 {
+    private readonly IAutenticationService _autenticationService;
+
+    public IdentityController(IAutenticationService autenticationService)
+    {
+        _autenticationService = autenticationService;
+    }
+
     [HttpGet]
-    [Route("Register")]
+    [Route("register")]
     public IActionResult Register()
     {
         if (!ModelState.IsValid) return View();
@@ -20,6 +28,7 @@ public class IdentityController : Controller
     {
         if (!ModelState.IsValid) return View(userRegister);
         // registro
+        var response = await _autenticationService.Register(userRegister);
         
         if (false) return View(userRegister);
         // realizar login na aplicação
@@ -41,7 +50,7 @@ public class IdentityController : Controller
     {
         if (!ModelState.IsValid) return View(userLogin);
         // registro
-        
+       var response = await _autenticationService.Login(userLogin);
         if (false) return View(userLogin);
         // realizar login na aplicação
         
