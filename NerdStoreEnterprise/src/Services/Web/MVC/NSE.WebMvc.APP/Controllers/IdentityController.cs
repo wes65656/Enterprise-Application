@@ -4,7 +4,6 @@ using NSE.WebMvc.APP.Service;
 
 namespace NSE.WebMvc.APP.Controllers;
 
-[ApiController]
 public class IdentityController : Controller
 {
     private readonly IAutenticationService _autenticationService;
@@ -18,21 +17,24 @@ public class IdentityController : Controller
     [Route("register")]
     public IActionResult Register()
     {
-        if (!ModelState.IsValid) return View();
         return View();
     }
     
     [HttpPost]
-    [Route("new-account")]
+    [Route("register")]
     public async Task<IActionResult> Register(UserRegister userRegister)
     {
         if (!ModelState.IsValid) return View(userRegister);
-        // registro
+
         var response = await _autenticationService.Register(userRegister);
         
-        if (false) return View(userRegister);
-        // realizar login na aplicação
+        if (response == null) 
+        {
+            // Adicionar mensagem de erro
+            return View(userRegister);
+        }
         
+        // realizar login na aplicação
         return RedirectToAction("Index", "Home");
     }
     
