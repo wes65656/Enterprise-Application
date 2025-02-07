@@ -13,7 +13,8 @@
         <div class="card-body">
             <h4 class="card-title mb-4">Welcome!</h4>
 
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+            <form asp-controller="Identity" asp-action="Register" method="post">
+                @Html.AntiForgeryToken()
                 
                 <div class="form-group">
                     <label asp-for="Email"></label>
